@@ -1,0 +1,7 @@
+.git
+.vercel
+.env
+.env.local
+.env.*.local
+DEPLOY.md
+assets/project-seoini.png
