@@ -1,177 +1,277 @@
-const header = document.querySelector("[data-header]");
-const menuToggle = document.querySelector("[data-menu-toggle]");
-const mobileMenu = document.querySelector("[data-mobile-menu]");
-const menuLinks = mobileMenu?.querySelectorAll("a") ?? [];
-const contactForm = document.querySelector("[data-contact-form]");
-const formStatus = document.querySelector("[data-form-status]");
-const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+/**
+ * HexNetGroup — Core Interactions & Motion
+ * Precision Lenis Smooth Scroll + GSAP Motion + Custom Crosshair
+ */
 
-if (window.lucide) {
-  window.lucide.createIcons({
-    attrs: {
-      "stroke-width": 1.65,
-    },
-  });
-}
+(function () {
+  'use strict';
 
-const setMenuState = (isOpen) => {
-  menuToggle?.setAttribute("aria-expanded", String(isOpen));
-  menuToggle?.setAttribute("aria-label", isOpen ? "Закрыть меню" : "Открыть меню");
-  mobileMenu?.classList.toggle("is-open", isOpen);
-  document.body.classList.toggle("menu-open", isOpen);
-};
+  // Check reduced motion preference
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-menuToggle?.addEventListener("click", () => {
-  setMenuState(menuToggle.getAttribute("aria-expanded") !== "true");
-});
-
-menuLinks.forEach((link) => link.addEventListener("click", () => setMenuState(false)));
-
-window.addEventListener(
-  "scroll",
-  () => header?.classList.toggle("is-scrolled", window.scrollY > 8),
-  { passive: true },
-);
-
-contactForm?.addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  const submitButton = contactForm.querySelector("button[type='submit']");
-  const formData = new FormData(contactForm);
-
-  if (formData.get("_honey")) return;
-
-  submitButton.disabled = true;
-  formStatus.textContent = "Отправляем сообщение…";
-
-  try {
-    const response = await fetch(contactForm.action, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(Object.fromEntries(formData.entries())),
+  // --- Lenis Smooth Scroll ---
+  let lenis = null;
+  if (!prefersReducedMotion && typeof window.Lenis !== 'undefined') {
+    lenis = new window.Lenis({
+      duration: 1.15,
+      smoothWheel: true,
     });
-    const result = await response.json().catch(() => ({}));
 
-    if (!response.ok || result.success === false || result.success === "false") {
-      throw new Error(result.message || "Form submission failed");
+    if (window.gsap && window.ScrollTrigger) {
+      lenis.on('scroll', window.ScrollTrigger.update);
+      window.gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+      });
+      window.gsap.ticker.lagSmoothing(0);
+    } else {
+      function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
+    }
+  }
+
+  // Smooth scroll helper
+  function smoothScrollTo(target) {
+    if (!target) return;
+    if (lenis) {
+      lenis.scrollTo(target, { duration: 1.4 });
+    } else {
+      const el = typeof target === 'string' ? document.querySelector(target) : target;
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }
+
+  // Attach smooth scrolling to all anchor links
+  document.querySelectorAll('a[href^="#"], button[data-scroll]').forEach((link) => {
+    link.addEventListener('click', (e) => {
+      const target = link.getAttribute('data-scroll') || link.getAttribute('href');
+      if (target && target !== '#') {
+        e.preventDefault();
+        smoothScrollTo(target);
+        closeMobileMenu();
+      }
+    });
+  });
+
+  // --- Mobile Menu Toggle ---
+  const mobileToggle = document.querySelector('[data-menu-toggle]');
+  const mobileDrawer = document.querySelector('[data-mobile-drawer]');
+  const mobileLinks = mobileDrawer ? mobileDrawer.querySelectorAll('a, button') : [];
+
+  function closeMobileMenu() {
+    if (mobileToggle && mobileDrawer) {
+      mobileToggle.setAttribute('aria-expanded', 'false');
+      mobileDrawer.classList.remove('is-open');
+      document.body.classList.remove('menu-open');
+    }
+  }
+
+  function toggleMobileMenu() {
+    if (!mobileToggle || !mobileDrawer) return;
+    const isOpen = mobileToggle.getAttribute('aria-expanded') === 'true';
+    mobileToggle.setAttribute('aria-expanded', String(!isOpen));
+    mobileDrawer.classList.toggle('is-open', !isOpen);
+    document.body.classList.toggle('menu-open', !isOpen);
+  }
+
+  if (mobileToggle) {
+    mobileToggle.addEventListener('click', toggleMobileMenu);
+  }
+  mobileLinks.forEach((l) => l.addEventListener('click', closeMobileMenu));
+
+  // --- Custom Crosshair Cursor ---
+  const cursorRoot = document.getElementById('cursor');
+  if (cursorRoot && !window.matchMedia('(hover: none), (pointer: coarse)').matches) {
+    let mouseX = -100;
+    let mouseY = -100;
+    let currentX = -100;
+    let currentY = -100;
+    let isMoving = false;
+
+    window.addEventListener(
+      'mousemove',
+      (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        if (!isMoving) {
+          isMoving = true;
+          currentX = mouseX;
+          currentY = mouseY;
+        }
+        const target = e.target;
+        const interactive = target && target.closest('a, button, [data-hover], input, textarea, label');
+        cursorRoot.classList.toggle('is-active', !!interactive);
+      },
+      { passive: true }
+    );
+
+    function cursorLoop() {
+      if (isMoving) {
+        currentX += (mouseX - currentX) * 0.18;
+        currentY += (mouseY - currentY) * 0.18;
+        cursorRoot.style.transform = `translate(${currentX}px, ${currentY}px)`;
+      }
+      requestAnimationFrame(cursorLoop);
+    }
+    requestAnimationFrame(cursorLoop);
+  }
+
+  // --- Preloader & Motion Init ---
+  const preloader = document.getElementById('preloader');
+  const counterEl = document.getElementById('preloader-counter');
+
+  function initMotion() {
+    if (prefersReducedMotion || !window.gsap) {
+      document.querySelectorAll('.mask-inner').forEach((m) => (m.style.transform = 'none'));
+      document.querySelectorAll('[data-reveal]').forEach((r) => {
+        r.style.opacity = '1';
+        r.style.transform = 'none';
+      });
+      return;
     }
 
-    contactForm.reset();
-    formStatus.textContent = "Сообщение отправлено. Мы свяжемся с вами в ближайшее время.";
-  } catch (error) {
-    formStatus.textContent = "Не удалось отправить форму. Напишите на hexnetgroup@outlook.com.";
-  } finally {
-    submitButton.disabled = false;
-  }
-});
+    const { gsap, ScrollTrigger } = window;
+    if (ScrollTrigger) {
+      gsap.registerPlugin(ScrollTrigger);
+    }
 
-document.querySelector("[data-year]").textContent = new Date().getFullYear();
-
-if (!prefersReducedMotion && window.gsap && window.ScrollTrigger) {
-  const { gsap, ScrollTrigger } = window;
-  gsap.registerPlugin(ScrollTrigger);
-
-  const heroTimeline = gsap.timeline({
-    defaults: { duration: 0.9, ease: "power3.out" },
-  });
-
-  heroTimeline
-    .from(".site-header > *:not(.mobile-menu)", {
-      y: -16,
-      autoAlpha: 0,
-      duration: 0.7,
-      stagger: 0.08,
-    })
-    .from(".hero-copy > *", { y: 38, autoAlpha: 0, stagger: 0.1 }, 0.12)
-    .from(".hero-visual", { autoAlpha: 0, duration: 1.15 }, 0.22)
-    .from(".hero-photo", { scale: 1.08, duration: 1.35, ease: "power2.out" }, 0.22)
-    .from(".visual-index", { y: 14, autoAlpha: 0, duration: 0.65 }, 0.55)
-    .from(".hero-meta > *", { y: 18, autoAlpha: 0, stagger: 0.09, duration: 0.65 }, 0.72);
-
-  const revealGroup = (trigger, targets, options = {}) => {
-    gsap.from(targets, {
-      scrollTrigger: {
-        trigger,
-        start: "top 84%",
-        once: true,
-      },
-      y: options.y ?? 42,
-      autoAlpha: 0,
-      duration: options.duration ?? 0.9,
-      stagger: options.stagger ?? 0.12,
-      ease: options.ease ?? "power3.out",
-      clearProps: "transform,opacity,visibility",
+    // Hero line masks (above the fold)
+    gsap.to('#top .mask-inner', {
+      y: 0,
+      duration: 1.1,
+      ease: 'power4.out',
+      stagger: 0.09,
+      delay: 0.1,
     });
-  };
 
-  revealGroup(".intro", [".intro .section-label", ".intro h2", ".intro-columns > p"], {
-    stagger: 0.11,
-  });
-  revealGroup(".directions", [".directions .section-heading", ...document.querySelectorAll(".direction-item")], {
-    stagger: 0.1,
-  });
-  revealGroup(".projects", [".projects .section-heading", ...document.querySelectorAll(".project-card")], {
-    y: 54,
-    stagger: 0.12,
-  });
-  revealGroup(".team", [
-    ".team .section-heading",
-    ".team-statement",
-    ...document.querySelectorAll(".role-row"),
-  ]);
-  revealGroup(".principles", [
-    ".principles > .section-label",
-    ".principles h2",
-    ".principles-aside",
-  ]);
-  revealGroup(".contact", [
-    ...document.querySelectorAll(".contact-copy > *"),
-    ...document.querySelectorAll(".contact-form > *"),
-  ], { stagger: 0.08 });
-  revealGroup(".site-footer", [
-    ...document.querySelectorAll(".footer-top > *"),
-    ...document.querySelectorAll(".footer-bottom > *"),
-  ], {
-    y: 22,
-    duration: 0.7,
-    stagger: 0.07,
-  });
+    if (ScrollTrigger) {
+      // Line mask reveals below the fold
+      gsap.utils
+        .toArray('.mask-inner')
+        .filter((el) => !el.closest('#top'))
+        .forEach((el) => {
+          gsap.to(el, {
+            y: 0,
+            duration: 1.1,
+            ease: 'power4.out',
+            scrollTrigger: {
+              trigger: el,
+              start: 'top 88%',
+            },
+          });
+        });
 
-  gsap.utils.toArray(".project-visual").forEach((symbol) => {
-    gsap.fromTo(
-      symbol,
-      { yPercent: 5 },
-      {
-        yPercent: -5,
-        ease: "none",
+      // Batch reveals
+      gsap.set('[data-reveal]', { y: 30, opacity: 0 });
+      ScrollTrigger.batch('[data-reveal]', {
+        start: 'top 90%',
+        onEnter: (batch) =>
+          gsap.to(batch, {
+            y: 0,
+            opacity: 1,
+            duration: 0.9,
+            ease: 'power3.out',
+            stagger: 0.15,
+            overwrite: true,
+          }),
+      });
+
+      // Parallax hero wordmark
+      gsap.to('[data-hero-mark]', {
+        yPercent: 20,
+        ease: 'none',
         scrollTrigger: {
-          trigger: symbol.closest(".project-card"),
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 0.8,
+          trigger: '#top',
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
         },
-      },
-    );
-  });
+      });
 
-  const motionMedia = gsap.matchMedia();
-  motionMedia.add("(min-width: 821px)", () => {
-    gsap.fromTo(
-      ".hero-photo",
-      { yPercent: -2 },
-      {
-        yPercent: 2,
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".hero",
-          start: "top top",
-          end: "bottom top",
-          scrub: 0.8,
-        },
+      ScrollTrigger.refresh();
+    }
+  }
+
+  if (preloader && counterEl && window.gsap) {
+    const counterObj = { v: 0 };
+    const tl = window.gsap.timeline({
+      onComplete: () => {
+        initMotion();
       },
-    );
-  });
-}
+    });
+
+    tl.to(counterObj, {
+      v: 100,
+      duration: 1.4,
+      ease: 'power2.inOut',
+      onUpdate: () => {
+        counterEl.textContent = `${String(Math.round(counterObj.v)).padStart(2, '0')}%`;
+      },
+    });
+
+    tl.to(preloader, {
+      clipPath: 'inset(0 0 100% 0)',
+      duration: 0.85,
+      ease: 'power4.inOut',
+      delay: 0.1,
+      onComplete: () => {
+        preloader.style.display = 'none';
+      },
+    });
+  } else {
+    if (preloader) preloader.style.display = 'none';
+    initMotion();
+  }
+
+  // --- Contact Form Handling ---
+  const contactForm = document.querySelector('[data-contact-form]');
+  const formStatus = document.querySelector('[data-form-status]');
+
+  if (contactForm) {
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = contactForm.querySelector('button[type="submit"]');
+      const formData = new FormData(contactForm);
+
+      if (formData.get('_honey')) return;
+
+      if (submitBtn) submitBtn.disabled = true;
+      if (formStatus) formStatus.textContent = 'Отправляем сообщение…';
+
+      try {
+        const response = await fetch(contactForm.action, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(Object.fromEntries(formData.entries())),
+        });
+
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok || result.success === false || result.success === 'false') {
+          throw new Error(result.message || 'Submission failed');
+        }
+
+        contactForm.reset();
+        if (formStatus) formStatus.textContent = 'Сообщение отправлено. Мы ответим в течение дня.';
+      } catch (err) {
+        if (formStatus) {
+          formStatus.textContent = 'Не удалось отправить форму. Напишите напрямую: hexnetgroup@outlook.com';
+        }
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+      }
+    });
+  }
+
+  // Year in footer
+  const yearEl = document.querySelector('[data-year]');
+  if (yearEl) {
+    yearEl.textContent = new Date().getFullYear();
+  }
+})();
