@@ -10,7 +10,9 @@
     <meta name="theme-color" content="#0e0e0e" />
     <title>HexNetGroup — цифровые продукты и технологии</title>
 
-    <link rel="icon" href="logo.png" type="image/png" />
+    <link rel="icon" type="image/png" href="assets/logos/ico.png" />
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="apple-touch-icon" href="assets/logos/ico.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -19,7 +21,7 @@
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body class="noise bg-base text-base">
+  <body class="bg-base text-base">
     <!-- Custom Crosshair Cursor -->
     <div class="cursor-root" id="cursor" aria-hidden="true">
       <div class="cursor-cross"></div>
@@ -107,7 +109,7 @@
           <button type="button" data-scroll="#process" class="mobile-nav-link u-link">
             <span>05</span>Подход
           </button>
-          <button type="button" data-scroll="#contact" class="mobile-nav-link u-link" style="margin-top: 1rem; color: var(--red);">
+          <button type="button" data-scroll="#contact" class="mobile-nav-link u-link" style="margin-top: 1rem; color: var(--brand-cyan);">
             <span>06</span>Связаться ↗
           </button>
         </nav>
@@ -117,6 +119,23 @@
     <main>
       <!-- Hero Section -->
       <section id="top" class="section-px" aria-labelledby="hero-heading">
+        <!-- Hero Video Background (Sci-Fi Cyan Tunnel) -->
+        <div class="hero-video-wrap" aria-hidden="true">
+          <video
+            id="hero-video"
+            class="hero-video"
+            autoplay
+            loop
+            muted
+            playsinline
+            preload="auto"
+          >
+            <source src="assets/videos/hero-bg-scifi.mp4" type="video/mp4" />
+            <source src="https://assets.mixkit.co/videos/34317/34317-720.mp4" type="video/mp4" />
+          </video>
+          <div class="hero-video-overlay"></div>
+        </div>
+
         <!-- Top Meta Row -->
         <div class="hero-meta-row">
           <div data-reveal>
@@ -153,6 +172,7 @@
             >
               Смотреть проекты ↓
             </button>
+
             <div
               class="font-mono2 text-faint2"
               style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; text-align: right;"
@@ -192,41 +212,41 @@
           <!-- Item Track 1 -->
           <div style="display: flex; align-items: center; flex-shrink: 0;">
             <span class="font-display" style="font-size: clamp(1.4rem, 3vw, 2.6rem); font-weight: 500; text-transform: uppercase; letter-spacing: -0.01em; padding: 0 clamp(1.5rem, 3vw, 2.5rem);">Стратегия</span>
-            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--red);"></span>
+            <span class="marquee-dot"></span>
             <span class="font-display" style="font-size: clamp(1.4rem, 3vw, 2.6rem); font-weight: 500; text-transform: uppercase; letter-spacing: -0.01em; padding: 0 clamp(1.5rem, 3vw, 2.5rem);">Дизайн</span>
-            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--red);"></span>
+            <span class="marquee-dot"></span>
             <span class="font-display" style="font-size: clamp(1.4rem, 3vw, 2.6rem); font-weight: 500; text-transform: uppercase; letter-spacing: -0.01em; padding: 0 clamp(1.5rem, 3vw, 2.5rem);">Веб-сервисы</span>
-            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--red);"></span>
+            <span class="marquee-dot"></span>
             <span class="font-display" style="font-size: clamp(1.4rem, 3vw, 2.6rem); font-weight: 500; text-transform: uppercase; letter-spacing: -0.01em; padding: 0 clamp(1.5rem, 3vw, 2.5rem);">Мобильные приложения</span>
-            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--red);"></span>
+            <span class="marquee-dot"></span>
             <span class="font-display" style="font-size: clamp(1.4rem, 3vw, 2.6rem); font-weight: 500; text-transform: uppercase; letter-spacing: -0.01em; padding: 0 clamp(1.5rem, 3vw, 2.5rem);">Облачная архитектура</span>
-            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--red);"></span>
+            <span class="marquee-dot"></span>
             <span class="font-display" style="font-size: clamp(1.4rem, 3vw, 2.6rem); font-weight: 500; text-transform: uppercase; letter-spacing: -0.01em; padding: 0 clamp(1.5rem, 3vw, 2.5rem);">Безопасность</span>
-            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--red);"></span>
+            <span class="marquee-dot"></span>
             <span class="font-display" style="font-size: clamp(1.4rem, 3vw, 2.6rem); font-weight: 500; text-transform: uppercase; letter-spacing: -0.01em; padding: 0 clamp(1.5rem, 3vw, 2.5rem);">Эксплуатация</span>
-            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--red);"></span>
+            <span class="marquee-dot"></span>
             <span class="font-display" style="font-size: clamp(1.4rem, 3vw, 2.6rem); font-weight: 500; text-transform: uppercase; letter-spacing: -0.01em; padding: 0 clamp(1.5rem, 3vw, 2.5rem);">BIM</span>
-            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--red);"></span>
+            <span class="marquee-dot"></span>
           </div>
 
           <!-- Item Track 2 (for seamless loop) -->
           <div style="display: flex; align-items: center; flex-shrink: 0;">
             <span class="font-display" style="font-size: clamp(1.4rem, 3vw, 2.6rem); font-weight: 500; text-transform: uppercase; letter-spacing: -0.01em; padding: 0 clamp(1.5rem, 3vw, 2.5rem);">Стратегия</span>
-            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--red);"></span>
+            <span class="marquee-dot"></span>
             <span class="font-display" style="font-size: clamp(1.4rem, 3vw, 2.6rem); font-weight: 500; text-transform: uppercase; letter-spacing: -0.01em; padding: 0 clamp(1.5rem, 3vw, 2.5rem);">Дизайн</span>
-            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--red);"></span>
+            <span class="marquee-dot"></span>
             <span class="font-display" style="font-size: clamp(1.4rem, 3vw, 2.6rem); font-weight: 500; text-transform: uppercase; letter-spacing: -0.01em; padding: 0 clamp(1.5rem, 3vw, 2.5rem);">Веб-сервисы</span>
-            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--red);"></span>
+            <span class="marquee-dot"></span>
             <span class="font-display" style="font-size: clamp(1.4rem, 3vw, 2.6rem); font-weight: 500; text-transform: uppercase; letter-spacing: -0.01em; padding: 0 clamp(1.5rem, 3vw, 2.5rem);">Мобильные приложения</span>
-            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--red);"></span>
+            <span class="marquee-dot"></span>
             <span class="font-display" style="font-size: clamp(1.4rem, 3vw, 2.6rem); font-weight: 500; text-transform: uppercase; letter-spacing: -0.01em; padding: 0 clamp(1.5rem, 3vw, 2.5rem);">Облачная архитектура</span>
-            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--red);"></span>
+            <span class="marquee-dot"></span>
             <span class="font-display" style="font-size: clamp(1.4rem, 3vw, 2.6rem); font-weight: 500; text-transform: uppercase; letter-spacing: -0.01em; padding: 0 clamp(1.5rem, 3vw, 2.5rem);">Безопасность</span>
-            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--red);"></span>
+            <span class="marquee-dot"></span>
             <span class="font-display" style="font-size: clamp(1.4rem, 3vw, 2.6rem); font-weight: 500; text-transform: uppercase; letter-spacing: -0.01em; padding: 0 clamp(1.5rem, 3vw, 2.5rem);">Эксплуатация</span>
-            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--red);"></span>
+            <span class="marquee-dot"></span>
             <span class="font-display" style="font-size: clamp(1.4rem, 3vw, 2.6rem); font-weight: 500; text-transform: uppercase; letter-spacing: -0.01em; padding: 0 clamp(1.5rem, 3vw, 2.5rem);">BIM</span>
-            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--red);"></span>
+            <span class="marquee-dot"></span>
           </div>
         </div>
       </section>
@@ -234,21 +254,18 @@
       <!-- About Section (40/60 Asymmetric Grid) -->
       <section id="about" class="section-px section-py" aria-labelledby="about-heading">
         <div class="about-grid">
-          <!-- Sticky Left Column -->
+          <!-- Sticky Left Column (Brand Logo) -->
           <div class="about-col-left">
-            <div class="sticky-sub">
-              <div class="font-mono2 text-faint2" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;" data-reveal>
-                01 — О группе
-              </div>
-              <div
-                class="font-mono2 text-muted2"
-                style="margin-top: 1.5rem; font-size: 11px; text-transform: uppercase; line-height: 1.9; letter-spacing: 0.14em;"
-                data-reveal
-              >
-                Объединяем экспертизу<br />
-                в стратегии, дизайне,<br />
-                разработке и эксплуатации<br />
-                цифровых продуктов.
+            <div class="sticky-sub" data-reveal>
+              <div class="about-logo-wrapper">
+                <img
+                  src="assets/logos/logo_white_text.png"
+                  alt="HexNetGroup"
+                  class="about-logo-img"
+                  width="480"
+                  height="178"
+                  loading="lazy"
+                />
               </div>
             </div>
           </div>
@@ -297,10 +314,10 @@
         </div>
 
         <div style="border-top: 1px solid var(--line);">
-          <!-- Item 01: Product (Green Accent) -->
+          <!-- Item 01: Product (Brand Cyan Accent - Front Hexagon) -->
           <article
             class="row-fill"
-            style="--row-accent: var(--green);"
+            style="--row-accent: var(--brand-cyan);"
             data-hover
             data-reveal
           >
@@ -316,10 +333,10 @@
             </div>
           </article>
 
-          <!-- Item 02: Development (Red Accent) -->
+          <!-- Item 02: Development (Brand Sky Blue Accent - Top Hexagon) -->
           <article
             class="row-fill"
-            style="--row-accent: var(--red);"
+            style="--row-accent: var(--brand-sky);"
             data-hover
             data-reveal
           >
@@ -335,10 +352,10 @@
             </div>
           </article>
 
-          <!-- Item 03: Infrastructure (Blue Accent) -->
+          <!-- Item 03: Infrastructure (Brand Deep Blue Accent - Bottom Hexagon) -->
           <article
             class="row-fill"
-            style="--row-accent: var(--blue);"
+            style="--row-accent: var(--brand-blue);"
             data-hover
             data-reveal
           >
@@ -380,7 +397,7 @@
                 001 / Web-платформа
               </div>
               <div class="font-mono2 text-base" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;">
-                <span class="status-dot" style="background: var(--green);"></span>Онлайн
+                <span class="status-dot" style="background: var(--brand-cyan); box-shadow: 0 0 8px var(--brand-cyan-glow);"></span>Онлайн
               </div>
             </div>
 
@@ -417,7 +434,7 @@
                 002 / Mobile
               </div>
               <div class="font-mono2 text-base" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;">
-                <span class="status-dot" style="background: var(--blue);"></span>Прототип
+                <span class="status-dot" style="background: var(--brand-sky); box-shadow: 0 0 8px var(--brand-sky-glow);"></span>Прототип
               </div>
             </div>
 
@@ -453,7 +470,7 @@
                 003 / Fitness app
               </div>
               <div class="font-mono2 text-base" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;">
-                <span class="status-dot" style="background: var(--blue);"></span>v1.0
+                <span class="status-dot" style="background: var(--brand-blue); box-shadow: 0 0 8px var(--brand-blue-glow);"></span>v1.0
               </div>
             </div>
 
@@ -519,33 +536,33 @@
               <div class="role-row" data-hover data-reveal>
                 <div style="display: flex; align-items: baseline; gap: clamp(1rem, 3vw, 2.5rem);">
                   <span class="font-mono2 text-faint2" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;">01</span>
-                  <span class="role-title">Product &amp; Design</span>
+                  <span class="role-title">Sayan</span>
                 </div>
-                <span class="role-desc">Смысл, сценарии, интерфейс</span>
+                <span class="role-desc">Директор</span>
               </div>
 
               <div class="role-row" data-hover data-reveal>
                 <div style="display: flex; align-items: baseline; gap: clamp(1rem, 3vw, 2.5rem);">
                   <span class="font-mono2 text-faint2" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;">02</span>
-                  <span class="role-title">Engineering</span>
+                  <span class="role-title">Aziza</span>
                 </div>
-                <span class="role-desc">Архитектура, код, качество</span>
+                <span class="role-desc">Дизайнер</span>
               </div>
 
               <div class="role-row" data-hover data-reveal>
                 <div style="display: flex; align-items: baseline; gap: clamp(1rem, 3vw, 2.5rem);">
                   <span class="font-mono2 text-faint2" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;">03</span>
-                  <span class="role-title">Infrastructure</span>
+                  <span class="role-title">Zhandos</span>
                 </div>
-                <span class="role-desc">Надёжность, данные, безопасность</span>
+                <span class="role-desc">Специалист</span>
               </div>
 
               <div class="role-row" data-hover data-reveal>
                 <div style="display: flex; align-items: baseline; gap: clamp(1rem, 3vw, 2.5rem);">
                   <span class="font-mono2 text-faint2" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;">04</span>
-                  <span class="role-title">Business</span>
+                  <span class="role-title">Almaz</span>
                 </div>
-                <span class="role-desc">Стратегия, развитие, партнёрства</span>
+                <span class="role-desc">Разработчик</span>
               </div>
             </div>
           </div>

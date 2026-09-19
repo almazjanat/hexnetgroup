@@ -10,9 +10,26 @@
   --muted: rgba(236, 234, 229, 0.52);
   --faint: rgba(236, 234, 229, 0.32);
   --line: rgba(236, 234, 229, 0.14);
-  --green: #458b64;
-  --red: #d41d1f;
-  --blue: #6d6fbf;
+
+  /* Brand Palette Extracted from logo.png */
+  --brand-cyan: #00e9ed;          /* Electric Cyan / Aqua (Front hexagon) */
+  --brand-cyan-glow: rgba(0, 233, 237, 0.45);
+  --brand-sky: #44b7ee;           /* Sky Blue / Azure (Top hexagon) */
+  --brand-sky-glow: rgba(68, 183, 238, 0.4);
+  --brand-blue: #2b82c9;          /* Deep Tech Blue (Bottom hexagon) */
+  --brand-blue-glow: rgba(43, 130, 201, 0.4);
+  --brand-ice: #e0ffff;           /* Translucent Ice White/Cyan (Connector) */
+
+  /* Semantic Brand Mappings */
+  --accent: var(--brand-cyan);
+  --accent-sky: var(--brand-sky);
+  --accent-blue: var(--brand-blue);
+
+  /* Legacy Aliases for seamless integration */
+  --red: var(--brand-cyan);
+  --green: var(--brand-sky);
+  --blue: var(--brand-blue);
+
   --font-display: 'Unbounded', 'Onest', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: 'Onest', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
@@ -71,8 +88,8 @@ body {
 }
 
 ::selection {
-  background: var(--fg);
-  color: var(--bg);
+  background: var(--brand-cyan);
+  color: #0e0e0e;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -146,18 +163,8 @@ button {
 }
 
 /* ==========================================================================
-   NOISE OVERLAY
+   NOISE OVERLAY (REMOVED)
    ========================================================================== */
-
-.noise::after {
-  content: '';
-  position: fixed;
-  inset: -50%;
-  z-index: 60;
-  pointer-events: none;
-  opacity: 0.05;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
 
 /* ==========================================================================
    CUSTOM CROSSHAIR CURSOR
@@ -302,6 +309,15 @@ button {
 
 .marquee-track.reverse {
   animation-direction: reverse;
+}
+
+.marquee-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--brand-cyan);
+  box-shadow: 0 0 8px var(--brand-cyan-glow);
 }
 
 /* ==========================================================================
@@ -519,6 +535,48 @@ button {
   padding-bottom: 2rem;
 }
 
+/* Hero Background Video & Dark Contrast Overlay */
+.hero-video-wrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.75;
+}
+
+.hero-video-overlay {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse at 50% 45%, rgba(14, 14, 14, 0.15) 0%, rgba(14, 14, 14, 0.72) 100%),
+    linear-gradient(180deg, rgba(14, 14, 14, 0.35) 0%, rgba(14, 14, 14, 0.05) 35%, rgba(14, 14, 14, 0.95) 100%);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-video {
+    display: none;
+  }
+}
+
+.hero-meta-row,
+.hero-statement,
+#top > div:last-child {
+  position: relative;
+  z-index: 2;
+}
+
 .hero-meta-row {
   display: flex;
   align-items: flex-start;
@@ -529,6 +587,7 @@ button {
   letter-spacing: 0.16em;
   color: var(--muted);
   line-height: 1.6;
+  text-shadow: 0 1px 12px rgba(14, 14, 14, 0.9);
 }
 
 .hero-statement {
@@ -541,20 +600,24 @@ button {
   font-weight: 500;
   line-height: 1.08;
   letter-spacing: -0.02em;
+  text-shadow: 0 2px 24px rgba(14, 14, 14, 0.85), 0 0 45px rgba(14, 14, 14, 0.7);
 }
 
 .hero-bottom-bar {
   margin-bottom: 1.5rem;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  flex-wrap: wrap;
+  text-shadow: 0 1px 12px rgba(14, 14, 14, 0.9);
 }
 
 .hero-wordmark-svg {
   display: block;
   width: 100%;
   height: auto;
+  filter: drop-shadow(0 2px 18px rgba(14, 14, 14, 0.9));
 }
 
 /* ==========================================================================
@@ -570,21 +633,66 @@ button {
 @media (min-width: 768px) {
   .about-grid {
     grid-template-columns: repeat(12, 1fr);
-    gap: 2.5rem;
+    gap: 3.5rem;
+    align-items: center;
   }
 }
 
 .about-col-left {
   grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @media (min-width: 768px) {
   .about-col-left {
     grid-column: span 5;
   }
-  .sticky-sub {
+  .about-col-left .sticky-sub {
     position: sticky;
-    top: 7rem;
+    top: 8rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .team-col-left .sticky-sub {
+    position: sticky;
+    top: 8rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.about-logo-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.about-logo-img {
+  display: block;
+  width: 100%;
+  max-width: 460px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 35px var(--brand-cyan-glow));
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+}
+
+.about-logo-img:hover {
+  transform: scale(1.04);
+  filter: drop-shadow(0 0 50px rgba(0, 233, 237, 0.6));
+}
+
+@media (max-width: 767px) {
+  .about-logo-img {
+    max-width: 320px;
+    margin-bottom: 2.5rem;
   }
 }
 
@@ -936,29 +1044,23 @@ button {
 }
 
 .role-desc {
-  display: none;
-  max-width: 180px;
+  display: block;
+  max-width: 220px;
   text-align: right;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: clamp(10px, 1.1vw, 12px);
   text-transform: uppercase;
-  line-height: 1.8;
+  line-height: 1.6;
   letter-spacing: 0.12em;
   color: var(--muted);
 }
 
-@media (min-width: 768px) {
-  .role-desc {
-    display: block;
-  }
-}
-
 /* ==========================================================================
-   PROCESS SECTION (RED ACCENT CARD)
+   PROCESS SECTION (BRAND ACCENT CARD)
    ========================================================================== */
 
 .process-section {
-  background: var(--red);
+  background: var(--brand-sky);
   color: #0e0e0e;
 }
 
@@ -977,7 +1079,7 @@ button {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1px;
-  background: rgba(14, 14, 14, 0.25);
+  background: rgba(14, 14, 14, 0.2);
 }
 
 @media (min-width: 768px) {
@@ -988,7 +1090,7 @@ button {
 }
 
 .process-card {
-  background: var(--red);
+  background: var(--brand-sky);
   padding: 2rem 0;
 }
 
